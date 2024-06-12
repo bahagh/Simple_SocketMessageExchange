@@ -29,6 +29,7 @@ This Game is a multiplayer Java application where two players engage in a conver
 
 The project adheres to the Maven directory structure and includes the following components:
 
+
 project-root/
 │
 ├── src/
@@ -44,7 +45,11 @@ project-root/
 │   │   └── resources/
 │   └── test/
 │       └── java/
-├── target/
+│           └── com/
+│               └── bahaGmbh/
+│                   └── projetjava/
+│                      └── PlayerTest.java.java
+├
 ├
 ├── pom.xml
 ├── run.sh
