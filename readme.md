@@ -29,7 +29,6 @@ This Game is a multiplayer Java application where two players engage in a conver
 
 The project adheres to the Maven directory structure and includes the following components:
 
-
 project-root/
 │
 ├── src/
@@ -54,6 +53,16 @@ project-root/
 ├── pom.xml
 ├── run.sh
 └── README.md
+
+The project adheres to the Maven directory structure and includes the following components:
+
+- `src/main/java/com/bahaGmbh/projetjava/`: Contains Java source files.
+- `src/main/resources/`: Includes any additional resources required.
+- `src/test/java/com/bahaGmbh/projetjava/`: Houses tests .
+- `pom.xml`: Maven project configuration file.
+- `run.sh`: Shell script to run the game with different execution modes.
+- `README.md`: Documentation file you're currently reading.
+
 
 ## Features
 
@@ -98,6 +107,7 @@ Follow these steps to run the Messaging Game:
 ## Additional Notes
 
 - Players take turns sending messages until both have sent and received 10 messages.
+
 
 
 
