@@ -13,8 +13,7 @@ This Java application allows two players to exchange messages in a fun and inter
   - [Running the Game](#running-the-game)
   - [Execution Modes](#execution-modes)
 - [Additional Notes](#additional-notes)
-- [Contributing](#contributing)
-- [License](#license)
+
 
 ## Introduction
 
