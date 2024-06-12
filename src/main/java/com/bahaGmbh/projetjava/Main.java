@@ -1,5 +1,5 @@
 /**
- * Represents the main class of the messaging game.
+ * Represents the main class of the game (5.for the part where instances with the same java process) .
  * Responsible for initializing players and facilitating message exchange.
  */
 
@@ -28,5 +28,6 @@ class Main {
 
         initiator.sendMessage(initialMessage);
         System.out.println("Conversation finished ! both players have sent and received 10 messages .");
+        scanner.close();    
     }
 }

@@ -4,12 +4,19 @@ import java.io.*;
 import java.net.*;
 import java.util.logging.*;
 
+/**
+ * The Server class represents the game server 
+ * that facilitates communication between two clients.
+ */
 public class Server {
     private static final int PORT = 12345;
     private static final Logger logger = Logger.getLogger(Server.class.getName());
     private String firstClientName;
     private boolean isFirstClientAssigned = false;
 
+    /**
+     * Starts the server and waits for players (clients) to connect
+     */
     public void start() {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
             logger.info("Game started. Waiting for Players to connect...");
@@ -39,10 +46,20 @@ public class Server {
         }
     }
 
+    /**
+     * Reads the client's name from the input stream.
+     */
     private String getClientName(BufferedReader in) throws IOException {
-        return in.readLine();
+        String name = in.readLine();
+        if (name == null || name.isEmpty()) {
+            throw new IOException("Client name cannot be null or empty.");
+        }
+        return name;
     }
 
+    /**
+     *  message exchange between two connected clients
+     */ 
     private void handleClientCommunication(Socket client1, Socket client2, String client1Name, String client2Name) {
         try (
             BufferedReader in1 = new BufferedReader(new InputStreamReader(client1.getInputStream()));
@@ -58,7 +75,7 @@ public class Server {
             while (messageCounter < 10) {
                 // Receive from Client 1
                 messageFromClient1 = in1.readLine();
-                if (messageFromClient1 == null) {
+                if (messageFromClient1 == null || messageFromClient1.equals("DISCONNECT")) {
                     logger.warning("Connection closed by " + client1Name + ".");
                     break;
                 }
@@ -70,7 +87,7 @@ public class Server {
 
                 // Receive from Client 2
                 messageFromClient2 = in2.readLine();
-                if (messageFromClient2 == null) {
+                if (messageFromClient2 == null || messageFromClient2.equals("DISCONNECT")) {
                     logger.warning("Connection closed by " + client2Name + ".");
                     break;
                 }
@@ -83,14 +100,45 @@ public class Server {
                 messageCounter++;
             }
 
+            /*  Final message handling outside loop to ensure even count             
+                (After Player 1 sends its 10th message, it will wait for the 10th message from Player 2, 
+                but because the loop condition checks the messageCounter before receiving this message, 
+                the loop exits after sending the 10th message and receiving the 9th)
+                
+             */
+
+            messageFromClient1 = in1.readLine();
+            if (messageFromClient1 != null && !messageFromClient1.equals("DISCONNECT")) {
+                out2.println(messageFromClient1);
+                logger.info("Final exchange: Sent to " + client2Name + ": " + messageFromClient1);
+            }
+
+            messageFromClient2 = in2.readLine();
+            if (messageFromClient2 != null && !messageFromClient2.equals("DISCONNECT")) {
+                out1.println(messageFromClient2);
+                logger.info("Final exchange: Sent to " + client1Name + ": " + messageFromClient2);
+            }
+
             logger.info("Game finished after relaying 20 messages between players.");
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Error during client communication", e);
+        } finally {
+            // Ensure sockets are closed properly
+            try {
+                client1.close();
+                client2.close();
+            } catch (IOException e) {
+                logger.log(Level.SEVERE, "Error closing client sockets", e);
+            }
         }
     }
 
+    /**
+     * The main method to start the server.
+     */
     public static void main(String[] args) {
         Server server = new Server();
         server.start();
     }
 }
+
